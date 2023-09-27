@@ -4,15 +4,19 @@ import os
 
 
 def download_weights(url, dest):
-    if not os.path.exists("tmp.tar"):
-        subprocess.check_call(["pget", url, "tmp.tar"])
-    tar = tarfile.open("tmp.tar")
-    tar.extractall(path="tmp")
+    """ Download the tar file, extract the weights, and move them to the "dest" directory. """
+    if not os.path.exists("/src/tmp.tar"):
+        print("Downloading weights...")
+        try:
+            output = subprocess.check_output(["pget", url, "/src/tmp.tar"])
+            print(output)
+        except subprocess.CalledProcessError as e:
+            # If download fails, clean up and re-raise exception
+            print(e.output)
+            raise e
+    tar = tarfile.open("/src/tmp.tar")
+    tar.extractall(path="/src/tmp")
     tar.close()
-
-
-if __name__ == "__main__":
-    download_weights(
-        url="https://storage.googleapis.com/replicate-weights/blip-2/weights.tar",
-        dest="weights",
-    )
+    os.rename("/src/tmp/weights", dest)
+    os.remove("/src/tmp.tar")
+    os.rmdir("/src/tmp")

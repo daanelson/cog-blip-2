@@ -8,14 +8,14 @@ from download_utils import download_weights
 
 WEIGHTS_CACHE_DIR = "/src/weights/"
 WEIGHTS_URL = "https://storage.googleapis.com/replicate-weights/blip-2/weights.tar"
+
+if not os.path.exists(WEIGHTS_CACHE_DIR):
+    download_weights(url=WEIGHTS_URL,dest=WEIGHTS_CACHE_DIR)
 os.environ["TORCH_HOME"] = os.environ["HF_HOME"] = os.environ["HUGGINGFACE_HUB_CACHE"] = WEIGHTS_CACHE_DIR
 
 
 class Predictor(BasePredictor):
     def setup(self):
-        if not os.path.exists(WEIGHTS_CACHE_DIR):
-            download_weights(url=WEIGHTS_URL,dest=WEIGHTS_CACHE_DIR)
-
         """Load the model into memory to make running multiple predictions efficient"""
         self.device = torch.device("cuda") if torch.cuda.is_available() else "cpu"
         self.model, self.vis_processors, _ = load_model_and_preprocess(
