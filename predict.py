@@ -1,18 +1,17 @@
-# Prediction interface for Cog ⚙️
-# https://github.com/replicate/cog/blob/main/docs/python.md
 import os
-
-cache = "/src/weights/"
-os.environ["TORCH_HOME"] = "/src/weights/"
-os.environ["HF_HOME"] = "/src/weights/"
-os.environ["HUGGINGFACE_HUB_CACHE"] = "/src/weights/"
-if not os.path.exists(cache):
-    os.makedirs(cache)
-
 import torch
+from PIL import Image
 from cog import BasePredictor, Input, Path
 from lavis.models import load_model_and_preprocess
-from PIL import Image
+from download_utils import download_weights
+
+
+WEIGHTS_CACHE_DIR = "/src/weights/"
+WEIGHTS_URL = "https://storage.googleapis.com/replicate-weights/blip-2/weights.tar"
+
+if not os.path.exists(WEIGHTS_CACHE_DIR):
+    download_weights(url=WEIGHTS_URL,dest=WEIGHTS_CACHE_DIR)
+os.environ["TORCH_HOME"] = os.environ["HF_HOME"] = os.environ["HUGGINGFACE_HUB_CACHE"] = WEIGHTS_CACHE_DIR
 
 
 class Predictor(BasePredictor):
