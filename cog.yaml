@@ -16,7 +16,6 @@ build:
     - omegaconf==2.3.0
     - salesforce-lavis==1.0.2
     - transformers==4.26.1
-    - wget
   run:
     - curl -o /usr/local/bin/pget -L "https://github.com/replicate/pget/releases/download/v0.0.1/pget" && chmod +x /usr/local/bin/pget
 predict: "predict.py:Predictor"
