@@ -7,7 +7,7 @@ from download_utils import download_weights
 
 
 WEIGHTS_CACHE_DIR = "/src/weights/"
-WEIGHTS_URL = "https://storage.googleapis.com/replicate-weights/blip-2/weights.tar"
+WEIGHTS_URL = "https://weights.replicate.delivery/default/blip-2/weights.tar"
 
 if not os.path.exists(WEIGHTS_CACHE_DIR):
     download_weights(url=WEIGHTS_URL,dest=WEIGHTS_CACHE_DIR)
